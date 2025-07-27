@@ -17,12 +17,12 @@ const Header = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <a 
-              href="#" 
+            <button 
+              onClick={() => navigate("/minha-assinatura")}
               className="text-primary font-semibold hover:underline hidden md:inline"
             >
               ENTRAR
-            </a>
+            </button>
             <Button 
               onClick={() => navigate("/cadastro-consumidor")}
               className="btn-cta"

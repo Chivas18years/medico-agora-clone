@@ -4,9 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import InputMask from "react-input-mask";
 
 const CadastroConsumidor = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     nome: "",
@@ -16,10 +19,38 @@ const CadastroConsumidor = () => {
     celular: "",
     dataNascimento: "",
     cep: "",
+    logradouro: "",
+    bairro: "",
+    cidade: "",
+    uf: "",
     senha: "",
     confirmacaoSenha: "",
     aceitarTermos: false,
   });
+
+  const handleCepChange = async (value: string) => {
+    const cleanCep = value.replace(/\D/g, "");
+    setFormData(prev => ({ ...prev, cep: value }));
+    
+    if (cleanCep.length === 8) {
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
+        const data = await response.json();
+        
+        if (!data.erro) {
+          setFormData(prev => ({
+            ...prev,
+            logradouro: data.logradouro || "",
+            bairro: data.bairro || "",
+            cidade: data.localidade || "",
+            uf: data.uf || ""
+          }));
+        }
+      } catch (error) {
+        console.error("Erro ao buscar CEP:", error);
+      }
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,9 +74,13 @@ const CadastroConsumidor = () => {
     }
 
     toast({
-      title: "Cadastro realizado!",
-      description: "Seu cadastro foi realizado com sucesso.",
+      title: "Cadastro realizado com sucesso!",
+      description: "Você será redirecionado para sua área de assinatura.",
     });
+    
+    setTimeout(() => {
+      navigate("/minha-assinatura");
+    }, 2000);
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -69,9 +104,12 @@ const CadastroConsumidor = () => {
               />
             </div>
             <div className="flex items-center gap-4">
-              <a href="/" className="text-primary font-semibold hover:underline">
+              <button 
+                onClick={() => navigate("/")}
+                className="text-primary font-semibold hover:underline"
+              >
                 Voltar
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -132,53 +170,152 @@ const CadastroConsumidor = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="cpf">CPF *</Label>
-                <Input
-                  id="cpf"
-                  type="text"
+                <InputMask
+                  mask="999.999.999-99"
                   value={formData.cpf}
                   onChange={(e) => handleInputChange("cpf", e.target.value)}
-                  placeholder="000.000.000-00"
-                  required
-                  className="h-12"
-                />
+                >
+                  {(inputProps: any) => 
+                    <Input
+                      {...inputProps}
+                      id="cpf"
+                      placeholder="000.000.000-00"
+                      required
+                      className="h-12"
+                    />
+                  }
+                </InputMask>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="celular">Celular *</Label>
-                <Input
-                  id="celular"
-                  type="tel"
+                <InputMask
+                  mask="(99) 99999-9999"
                   value={formData.celular}
                   onChange={(e) => handleInputChange("celular", e.target.value)}
-                  placeholder="(00) 00000-0000"
-                  required
+                >
+                  {(inputProps: any) => 
+                    <Input
+                      {...inputProps}
+                      id="celular"
+                      placeholder="(00) 00000-0000"
+                      required
+                      className="h-12"
+                    />
+                  }
+                </InputMask>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="dataNascimento">Data de Nascimento *</Label>
+                <InputMask
+                  mask="99/99/9999"
+                  value={formData.dataNascimento}
+                  onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
+                >
+                  {(inputProps: any) => 
+                    <Input
+                      {...inputProps}
+                      id="dataNascimento"
+                      placeholder="00/00/0000"
+                      required
+                      className="h-12"
+                    />
+                  }
+                </InputMask>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="cep">CEP *</Label>
+                <InputMask
+                  mask="99999-999"
+                  value={formData.cep}
+                  onChange={(e) => handleCepChange(e.target.value)}
+                >
+                  {(inputProps: any) => 
+                    <Input
+                      {...inputProps}
+                      id="cep"
+                      placeholder="00000-000"
+                      required
+                      className="h-12"
+                    />
+                  }
+                </InputMask>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="logradouro">Endereço</Label>
+                <Input
+                  id="logradouro"
+                  type="text"
+                  value={formData.logradouro}
+                  onChange={(e) => handleInputChange("logradouro", e.target.value)}
+                  placeholder="Rua, número"
                   className="h-12"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dataNascimento">Data de Nascimento *</Label>
+                <Label htmlFor="bairro">Bairro</Label>
                 <Input
-                  id="dataNascimento"
-                  type="date"
-                  value={formData.dataNascimento}
-                  onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
-                  required
+                  id="bairro"
+                  type="text"
+                  value={formData.bairro}
+                  onChange={(e) => handleInputChange("bairro", e.target.value)}
+                  placeholder="Bairro"
                   className="h-12"
                 />
               </div>
 
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="cep">CEP *</Label>
+              <div className="space-y-2">
+                <Label htmlFor="cidade">Cidade</Label>
                 <Input
-                  id="cep"
+                  id="cidade"
                   type="text"
-                  value={formData.cep}
-                  onChange={(e) => handleInputChange("cep", e.target.value)}
-                  placeholder="00000-000"
-                  required
+                  value={formData.cidade}
+                  onChange={(e) => handleInputChange("cidade", e.target.value)}
+                  placeholder="Cidade"
                   className="h-12"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="uf">UF</Label>
+                <Select value={formData.uf} onValueChange={(value) => handleInputChange("uf", value)}>
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Selecione o estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="AC">AC</SelectItem>
+                    <SelectItem value="AL">AL</SelectItem>
+                    <SelectItem value="AP">AP</SelectItem>
+                    <SelectItem value="AM">AM</SelectItem>
+                    <SelectItem value="BA">BA</SelectItem>
+                    <SelectItem value="CE">CE</SelectItem>
+                    <SelectItem value="DF">DF</SelectItem>
+                    <SelectItem value="ES">ES</SelectItem>
+                    <SelectItem value="GO">GO</SelectItem>
+                    <SelectItem value="MA">MA</SelectItem>
+                    <SelectItem value="MT">MT</SelectItem>
+                    <SelectItem value="MS">MS</SelectItem>
+                    <SelectItem value="MG">MG</SelectItem>
+                    <SelectItem value="PA">PA</SelectItem>
+                    <SelectItem value="PB">PB</SelectItem>
+                    <SelectItem value="PR">PR</SelectItem>
+                    <SelectItem value="PE">PE</SelectItem>
+                    <SelectItem value="PI">PI</SelectItem>
+                    <SelectItem value="RJ">RJ</SelectItem>
+                    <SelectItem value="RN">RN</SelectItem>
+                    <SelectItem value="RS">RS</SelectItem>
+                    <SelectItem value="RO">RO</SelectItem>
+                    <SelectItem value="RR">RR</SelectItem>
+                    <SelectItem value="SC">SC</SelectItem>
+                    <SelectItem value="SP">SP</SelectItem>
+                    <SelectItem value="SE">SE</SelectItem>
+                    <SelectItem value="TO">TO</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
@@ -229,7 +366,7 @@ const CadastroConsumidor = () => {
             <div className="pt-6">
               <Button 
                 type="submit" 
-                className="btn-primary w-full h-14 text-lg"
+                className="btn-cta w-full h-14 text-lg"
               >
                 CADASTRAR
               </Button>
