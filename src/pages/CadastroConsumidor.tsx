@@ -6,11 +6,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAdmin } from "@/contexts/AdminContext";
 import InputMask from "react-input-mask";
 
 const CadastroConsumidor = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { addUser } = useAdmin();
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -72,6 +74,15 @@ const CadastroConsumidor = () => {
       });
       return;
     }
+
+    // Adicionar usuário ao sistema admin
+    addUser({
+      nome: formData.nome,
+      email: formData.email,
+      cpf: formData.cpf,
+      celular: formData.celular,
+      plano: 'Não selecionado'
+    });
 
     toast({
       title: "Cadastro realizado com sucesso!",
