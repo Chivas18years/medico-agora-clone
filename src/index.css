@@ -2,41 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Médico Agora Design System - Cores exatas da plataforma original */
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 210 22% 16%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 22% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 22% 16%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Cores principais do Médico Agora */
+    --primary: 210 89% 42%; /* #106bc6 */
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 210 82% 32%; /* #0d5c91 */
+    
+    --secondary: 210 23% 97%; /* #f8f9fa */
+    --secondary-foreground: 210 11% 31%; /* #495057 */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 23% 97%; /* #f8f9fa */
+    --muted-foreground: 210 11% 31%; /* #495057 */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 89% 42%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 210 23% 97%;
+    --input: 210 23% 97%;
+    --ring: 210 89% 42%;
 
-    --radius: 0.5rem;
+    --radius: 1.25rem; /* 20px border radius padrão */
+    
+    /* Gradientes personalizados */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-dark)));
+    --gradient-card: linear-gradient(180deg, hsl(var(--primary-dark)), hsl(var(--primary)));
+    
+    /* Sombras personalizadas */
+    --shadow-card: 0 10px 30px -10px hsl(var(--primary) / 0.2);
+    --shadow-button: 0 4px 15px hsl(var(--primary) / 0.3);
+    
+    /* Transições suaves */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +111,57 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-montserrat;
+  }
+}
+
+@layer components {
+  /* Botões CTA principais */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground px-8 py-4 rounded-full font-bold uppercase tracking-wide transition-all duration-300 hover:shadow-[var(--shadow-button)] hover:scale-105 border-none;
+  }
+  
+  .btn-cta {
+    @apply btn-primary text-sm;
+  }
+  
+  /* Cards de preços */
+  .price-card {
+    @apply bg-[hsl(var(--primary-dark))] text-white rounded-[var(--radius)] p-6 shadow-[var(--shadow-card)] transition-transform duration-300 hover:scale-105;
+  }
+  
+  .price-box {
+    @apply bg-primary text-white rounded-full px-6 py-3 text-center mb-4;
+  }
+  
+  /* Seções de benefícios */
+  .benefit-list {
+    @apply space-y-3;
+  }
+  
+  .benefit-item {
+    @apply flex items-start gap-2;
+  }
+  
+  /* Acordeão customizado */
+  .faq-item {
+    @apply bg-secondary border border-border rounded-lg mb-2 overflow-hidden;
+  }
+  
+  .faq-trigger {
+    @apply w-full p-4 text-left font-semibold flex justify-between items-center hover:bg-secondary/80 transition-colors;
+  }
+  
+  .faq-content {
+    @apply p-4 pt-0 text-secondary-foreground;
+  }
+  
+  /* Títulos responsivos */
+  .hero-title {
+    @apply text-4xl md:text-5xl lg:text-6xl font-black text-foreground leading-tight;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-foreground mb-8;
   }
 }
