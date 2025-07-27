@@ -9,10 +9,10 @@ const PartnersSection = () => {
           Acesse nosso clube de benefícios com descontos em grandes marcas
         </p>
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <img 
-            src="/lovable-uploads/323f196f-ff9b-4c5e-9daa-5f423c58b7ad.png" 
-            alt="Logos dos parceiros" 
+            src="/lovable-uploads/f1343e3a-ac5d-48ef-abec-265126c7d96a.png" 
+            alt="Logos dos parceiros - Droga Raia, Burger King, Marisa, Pague Menos, Centauro, Renner, Casas Bahia, Drogasil, Cinemark, Magalu, Netshoes, Riachuelo" 
             className="w-full h-auto"
           />
         </div>

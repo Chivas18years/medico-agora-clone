@@ -6,6 +6,22 @@ const PricingSection = () => {
 
   const plans = [
     {
+      type: "CONSULTA ÚNICA",
+      price: "R$ 44,50",
+      period: "por consulta",
+      features: [
+        "Consultas 24h com clínico geral;",
+        "Sem limite de uso, use quantas vezes precisar;",
+        "Não tem fidelidade, cancele quando quiser;",
+        "Não tem carência, comece a usar agora mesmo;",
+        "Sem acesso ao nosso clube de benefícios."
+      ],
+      disclaimer: "Válido apenas para o titular do cadastro.",
+      fee: "Pague por consulta apenas quando precisar.",
+      buttonStyle: "bg-cyan-400 hover:bg-cyan-300 text-primary-dark",
+      isSpecial: true
+    },
+    {
       type: "ASSINATURA INDIVIDUAL",
       price: "R$ 19,90",
       period: "por mês",
@@ -37,7 +53,8 @@ const PricingSection = () => {
       ],
       disclaimer: "Válido para o titular do cadastro e 3 dependentes.",
       fee: "Taxa de adesão de R$ 20,00 paga apenas uma vez.",
-      buttonStyle: "bg-cyan-400 hover:bg-cyan-300 text-primary-dark"
+      buttonStyle: "bg-cyan-400 hover:bg-cyan-300 text-primary-dark",
+      isPopular: true
     },
     {
       type: "ASSINATURA EMPRESARIAL",
@@ -59,15 +76,34 @@ const PricingSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-secondary">
-      <div className="container mx-auto px-4">
+    <section 
+      className="py-16 bg-secondary relative overflow-hidden"
+      style={{
+        backgroundImage: `url('/lovable-uploads/2120bb94-7be3-4b98-ab7f-002bffaead7e.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="absolute inset-0 bg-secondary/90"></div>
+      <div className="container mx-auto px-4 relative z-10">
         <h2 className="section-title text-center mb-12">
           Assinaturas e Planos
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
           {plans.map((plan, index) => (
-            <div key={index} className="price-card">
+            <div key={index} className={`price-card ${plan.isPopular ? 'ring-2 ring-cyan-400 ring-opacity-50' : ''} ${plan.isSpecial ? 'ring-2 ring-yellow-400 ring-opacity-50' : ''}`}>
+              {plan.isPopular && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-cyan-400 text-primary-dark px-4 py-1 rounded-full text-xs font-bold">
+                  MAIS POPULAR
+                </div>
+              )}
+              {plan.isSpecial && (
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-primary-dark px-4 py-1 rounded-full text-xs font-bold">
+                  CONSULTA ÚNICA
+                </div>
+              )}
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold mb-4">{plan.type}</h3>
                 <div className="price-box">
